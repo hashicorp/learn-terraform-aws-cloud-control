@@ -1,5 +1,10 @@
 # AWS CC provider tutorial
 
+This information is under Non-Disclosure Agreement and not for disclosure
+outside HashiCorp except with AWS. At this time we ask that you do not discuss
+or mention the contents with HashiCorp customers or prospects or external
+parties.
+
 For now, you must build the provider to use the tutorial. On release (Sept
 30th), it will be in the registry as a normal provider. To install the provider
 manually:
