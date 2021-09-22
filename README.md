@@ -39,23 +39,3 @@ provider_installation {
   direct {}
 }
 ```
-
-## Prerequisites
-
-## Clone example configuration
-
-## Review configuration
-
-## Create S3 buckets
-
-## Add AWS Cloud Control provider
-
-## Add Appflow resource
-
-## Load data into source bucket
-
-## Read results from destination bucket
-
-## Clean up your infrastructure
-
-## Next steps
