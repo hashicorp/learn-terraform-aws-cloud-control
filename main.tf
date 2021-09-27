@@ -20,80 +20,54 @@ provider "awscc" {
   region = "us-west-2"
 }
 
-resource "aws_s3_bucket" "source" {
-  bucket_prefix = "awscc-appflow-source-"
-  force_destroy = true
-  acl           = "private"
+resource "aws_kms_key" "example" {
+  description = "Example key for Cassandra table"
 }
 
-resource "aws_s3_bucket" "destination" {
-  bucket_prefix = "awscc-appflow-destination-"
-  force_destroy = true
-  acl           = "private"
-}
+# resource "aws_s3_bucket" "source" {
+#   bucket_prefix = "awscc-appflow-source-"
+#   force_destroy = true
+#   acl           = "private"
+# }
+
+# resource "aws_s3_bucket" "destination" {
+#   bucket_prefix = "awscc-appflow-destination-"
+#   force_destroy = true
+#   acl           = "private"
+# }
 
 ## Add during tutorial:
-## FIXME, work in progress
-resource "awscc_appflow_flow" "flow" {
-  flow_name = "s3-to-s3-flow"
 
-  source_flow_config = {
-    connector_type = "S3"
-    source_connector_properties = {
-      s3 = {
-        bucket_name   = aws_s3_bucket.source.bucket
-        bucket_prefix = "foo"
-      }
-    }
-  }
-  destination_flow_config_list = [
+resource "awscc_cassandra_keyspace" "example" {
+  keyspace_name = "terraform"
+}
+
+resource "awscc_cassandra_table" "example" {
+  keyspace_name = awscc_cassandra_keyspace.example.keyspace_name
+
+  partition_key_columns = [
     {
-      connector_type = "S3"
-      destination_connector_properties = {
-        s3 = {
-          bucket_name   = aws_s3_bucket.destination.bucket
-          bucket_prefix = "bar"
-        }
-      }
+      column_name: "uid"
+      column_type: "uuid"
     }
   ]
-  tasks = [
-#     {
-#       task_type       = "Filter"
+# regular_columns = [
+#   {
+#     column_name: "firstName"
+#     column_type: "text"
+#   },
+#   {
+#     column_name: "lastName"
+#     column_type: "text"
+#   },
+#   {
+#     column_name: "email"
+#     column_type: "text"
+#   }
+# ]
 
-#       source_fields = [
-#         "column_one",
-#         "column_two",
-#         "column_three"
-#       ]
-#       connector_operator = {
-#         s3 = "PROJECTION"
-#       }
-# //      task_properties = []
-#     },
-    {
-        source_fields = [
-            "column_one"
-        ]
-        connector_operator = {
-            s3 = "NO_OP"
-        }
-        destination_field = "column_one"
-        task_type = "Map"
-        task_properties = [{
-          key = "SOURCE_DATA_TYPE"
-          value = "string"
-        },
-        {
-          key = "DESTINATION_DATA_TYPE"
-          value = "string"
-        }]
-    }
-  ]
-  trigger_config = {
-    trigger_type = "Scheduled"
-    trigger_properties = {
-      schedule_expression = "rate(1minutes)"
-    }
+  encryption_specification = {
+    encryption_type: "AWS_OWNED_KMS_KEY"
+    kms_key_identifier: aws_kms_key.example.key_id // # key ID or ARN
   }
 }
