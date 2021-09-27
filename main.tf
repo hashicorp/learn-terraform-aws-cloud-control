@@ -42,7 +42,7 @@ resource "awscc_appflow_flow" "flow" {
     source_connector_properties = {
       s3 = {
         bucket_name   = aws_s3_bucket.source.bucket
-        bucket_prefix = ""
+        bucket_prefix = "foo"
       }
     }
   }
@@ -52,38 +52,43 @@ resource "awscc_appflow_flow" "flow" {
       destination_connector_properties = {
         s3 = {
           bucket_name   = aws_s3_bucket.destination.bucket
-          bucket_prefix = ""
+          bucket_prefix = "bar"
         }
       }
     }
   ]
   tasks = [
+#     {
+#       task_type       = "Filter"
+
+#       source_fields = [
+#         "column_one",
+#         "column_two",
+#         "column_three"
+#       ]
+#       connector_operator = {
+#         s3 = "PROJECTION"
+#       }
+# //      task_properties = []
+#     },
     {
-      source_fields = [
-        "column_one",
-        "column_two"
-      ]
-      connector_operator = {
-        s3 = "PROJECTION"
-      }
-      task_type       = "Filter"
-      task_properties = []
-    },
-    # {
-    #     source_fields = [
-    #         "column_one",
-    #         "column_two"
-    #     ]
-    #     connector_operator = {
-    #         s3 = "NO_OP"
-    #     }
-    #     destination_field = "column_one,column_two"
-    #     task_type = "Merge"
-    #     task_properties = [{
-    #         key = "CONCAT_FORMAT"
-    #         value = "$${column_one} $${column_two}"
-    #     }]
-    # }
+        source_fields = [
+            "column_one"
+        ]
+        connector_operator = {
+            s3 = "NO_OP"
+        }
+        destination_field = "column_one"
+        task_type = "Map"
+        task_properties = [{
+          key = "SOURCE_DATA_TYPE"
+          value = "string"
+        },
+        {
+          key = "DESTINATION_DATA_TYPE"
+          value = "string"
+        }]
+    }
   ]
   trigger_config = {
     trigger_type = "Scheduled"
