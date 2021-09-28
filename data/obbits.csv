@@ -1,4 +1,4 @@
-id,firstName,lastName,email
+id,first_name,last_name,email
 1,Frodo,Baggins,ringbearer@example.com
 2,Samwise,Gamgee,gardener@example.com
 3,Peregrin,Took,foolofatook@example.com
