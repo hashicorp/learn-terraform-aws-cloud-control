@@ -41,9 +41,9 @@ resource "aws_kms_key" "terraform" {
 #   keyspace_name = random_pet.keyspace.id
 # }
 
-# resource "awscc_cassandra_table" "obbits" {
+# resource "awscc_cassandra_table" "hobbits" {
 #   keyspace_name = awscc_cassandra_keyspace.terraform.keyspace_name
-#   table_name    = "obbits"
+#   table_name    = "hobbits"
 
 #   partition_key_columns = [
 #     {
