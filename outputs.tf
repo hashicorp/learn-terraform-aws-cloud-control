@@ -1,5 +1,5 @@
 output "kms_key_id" {
-  description = "ID of key used to encrypt table data."
+  description = "ID of the KMS key used to encrypt table data."
   value       = aws_kms_key.terraform.key_id
 }
 
